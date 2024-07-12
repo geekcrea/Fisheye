@@ -1,46 +1,52 @@
-    async function getPhotographers() {
-        // Ceci est un exemple de données pour avoir un affichage de photographes de test dès le démarrage du projet, 
-        // mais il sera à remplacer avec une requête sur le fichier JSON en utilisant "fetch".
-        let photographers = [
-            {
-                "name": "Ma data test",
-                "id": 1,
-                "city": "Paris",
-                "country": "France",
-                "tagline": "Ceci est ma data test",
-                "price": 400,
-                "portrait": "account.png"
-            },
-            {
-                "name": "Autre data test",
-                "id": 2,
-                "city": "Londres",
-                "country": "UK",
-                "tagline": "Ceci est ma data test 2",
-                "price": 500,
-                "portrait": "account.png"
-            },
-        ]
-        // et bien retourner le tableau photographers seulement une fois récupéré
-        return ({
-            photographers: [...photographers, ...photographers, ...photographers]})
-    }
-
-    async function displayData(photographers) {
-        const photographersSection = document.querySelector(".photographer_section");
-
-        photographers.forEach((photographer) => {
-            const photographerModel = photographerTemplate(photographer);
-            const userCardDOM = photographerModel.getUserCardDOM();
-            photographersSection.appendChild(userCardDOM);
-        });
-    }
-
-    async function init() {
-        // Récupère les datas des photographes
-        const { photographers } = await getPhotographers();
-        displayData(photographers);
-    }
-    
-    init();
-    
+// fonction asynchrone pour récupérer les données des photographes depuis un fichier JSON.
+async function getPhotographers () {
+    // requête pour récupérer le fichier JSON contenant les données des photographes.
+    const response = await fetch('./data/photographers.json')
+    // Transforme la réponse JSON en un objet JavaScript.
+    const data = await response.json()
+    // Renvoie la liste des photographes
+    return data.photographers
+  }
+  
+  // Définit une fonction asynchrone pour afficher les données des photographes.
+  async function displayData (photographers) {
+    // Sélectionne l'élément HTML qui contiendra les photographes.
+    const photographersSection = document.querySelector('.photographer_section')
+    // Itère sur chaque objet photographe pour créer et ajouter les photographes.
+    photographers.forEach((photographer) => {
+      // Appelle photographerTemplate pour créer un nouvel élément de carte de photographe.
+      const photographerModel = photographerTemplate(photographer)
+      // Récupère l'élément DOM pour la carte du photographe.
+      const userCardDOM = photographerModel.getUserCardDOM()
+      // Ajoute la carte du photographe à la section correspondante dans le DOM.
+      photographersSection.appendChild(userCardDOM);
+      // Ajoute des écouteurs d'événements de clic et de clavier aux éléments 'img' et 'h2' à l'intérieur de la carte.
+      ['img', 'h2'].forEach(selector => {
+        // Sélectionne l'élément spécifique à l'intérieur de la carte.
+        const element = userCardDOM.querySelector(selector)
+        // Ajoute un écouteur d'événements de clic qui redirige vers une page détaillée pour le photographe.
+        element.addEventListener('click', () => {
+          window.location.href = `photographer.html?id=${photographer.id}`
+        })
+        // Ajoute un écouteur d'événements de clavier pour permettre la navigation via le clavier (touche Entrée ou Espace).
+        element.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            window.location.href = `photographer.html?id=${photographer.id}`
+          }
+        })
+      })
+    })
+  }
+  
+  // Définit la fonction initiale pour récupérer et afficher les photographes au chargement de la page.
+  async function init () {
+    // Récupère la liste des photographes en appelant getPhotographers.
+    const photographers = await getPhotographers()
+    // Affiche les photographes sur la page en appelant displayData.
+    await displayData(photographers)
+  }
+  
+  // Appelle la fonction init lorsque le script est chargé pour démarrer le processus.
+  init()
+  
+  
