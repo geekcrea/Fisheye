@@ -268,7 +268,7 @@
     transition: .15s ease-out;
     position: relative;
     left: calc(50% - 85px);
-    bottom: 255px;
+    bottom: 60px;
   }
   
   .contact_button:hover,
