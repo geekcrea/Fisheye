@@ -1,92 +1,126 @@
-// Extraire les paramètres de l'URL pour obtenir l'ID du photographe
-const urlParams = new URLSearchParams(window.location.search)
-const photographerId = parseInt(urlParams.get('id'), 10)
+import { mediaFactory } from '../factories/mediaFactory.js';
+import { globalState } from '../utils/globalState.js';
 
-// Fonction asynchrone pour récupérer les données du photographe et de ses médias.
-async function fetchData (photographerId) {
-  try {
-    // Récupération des données JSON .
-    const response = await fetch('./data/photographers.json')
-    const data = await response.json()
-    // Recherche du photographe par ID.
-    const photographer = data.photographers.find(p => p.id === photographerId)
-    // Filtrage des médias qui appartiennent au photographe trouvé.
-    const medias = data.media.filter(m => m.photographerId === photographerId)
-    return { photographer, medias }
-  } catch (error) {
-    // Gestion des erreurs en cas de problème de récupération des données.
-    console.error('Erreur lors de la récupération des données:', error)
-  }
-}
-// Affichage des informations du photographe sur la page.
-async function displayPhotographer () {
-  const { photographer } = await fetchData(photographerId)
-  if (photographer) {
-    const photographHeader = document.querySelector('.photograph-header')
-    const photographerModel = photographerTemplate(photographer, true)
-    const userCardDOM = photographerModel.getUserCardDOM()
-    photographHeader.appendChild(userCardDOM)
-  }
-}
-// Affichage des informations de contact du photographe.
-async function displayContact () {
-  const { photographer } = await fetchData(photographerId)
-  if (photographer) {
-    const contactModel = contactTemplate(photographer)
-    const contactElement = contactModel.getContactDOM()
-    return contactElement
-  }
-}
-// Affichage des médias du photographe (photos et vidéos).
-async function displayMedia () {
-  const { medias } = await fetchData(photographerId) // Ajout de 'photographer' ici
-  const photographerMedias = document.querySelector('.media-container')
-  medias.forEach(mediaData => {
-    const media = PhotographerMedia.createMedia(mediaData)
-    const mediaDOM = media.getMediaDOM()
-    photographerMedias.appendChild(mediaDOM)
+// local state variables
+let mediaClickedIndex;
+let media = globalState.media;
 
-    allMediaPaths.push(media.image || media.video)
-  })
-  initializeLightboxListeners()
+// extract photographer id from the current URL
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const photographerId = urlParams.get('id');
+
+// fetch and return photographer and media data based on photographer's ID
+export async function getPhotographer() {
+  return fetch('./data/photographers.json')
+    .then((res) => res.json())
+    .then((data) => {
+      const photographer = data.photographers.find(
+        (p) => p.id === parseInt(photographerId)
+      );
+      media = data.media.filter(
+        (m) => m.photographerId === parseInt(photographerId)
+      );
+      return { photographer, media };
+    });
 }
 
-// Affichage du nombre total de "likes" pour les médias du photographe.
-async function displayLikes () {
-  const { photographer, medias } = await fetchData(photographerId)
-  if (photographer && medias) {
-    const totalLikesContainer = document.querySelector('.total-likes-global')
-    if (totalLikesContainer) {
-      const likeModel = createLikes(photographer, medias)
-      totalLikesContainer.appendChild(likeModel.totalLikesDOM)
-    } else {
-      console.error("Erreur : Le conteneur '.total-likes-container' n'a pas été trouvé dans le DOM.")
-    }
-  } else {
-    console.error('Erreur : Les données du photographe ou des médias sont manquantes.')
-  }
+// populate the header with photographer details
+async function displayPhotographData(photographerData) {
+  const picture = `./assets/images/photographers/00-Portraits/${photographerData.portrait}`;
+  const photographPicture = document.getElementById('photographPicture');
+  photographPicture.setAttribute('src', picture);
+  photographPicture.setAttribute('alt', photographerData.name);
+  const photographName = document.getElementById('photographName');
+  photographName.textContent = photographerData.name;
+  const photographCityCountry = document.getElementById(
+    'photographCityCountry'
+  );
+  photographCityCountry.textContent = `${photographerData.city}, ${photographerData.country}`;
+  const photographTagline = document.getElementById('photographTagline');
+  photographTagline.textContent = photographerData.tagline;
+  const nbLike = document.getElementById('nbLike');
+  nbLike.textContent = 'nbLike';
+  const priceBlock = document.getElementById('priceBlock');
+  priceBlock.textContent = `${photographerData.price}€ / jour`;
 }
-// Affichage de l'interrupteur pour filtrer les médias selon certains critères.
-async function displayToggle () {
-  const { medias } = await fetchData(photographerId)
-  if (medias) {
-    const toggleDiv = document.querySelector('.toggle')
-    const toggleModel = createToggle(medias)
-    toggleDiv.appendChild(toggleModel.getToggleDOM())
-  }
-}
-// Fonction initiale qui orchestre les appels des fonctions d'affichage lors du chargement de la page.
-async function init () {
-  try {
-    await displayPhotographer(photographerId)
-    await displayMedia(photographerId)
-    await displayContact(photographerId)
-    await displayLikes(photographerId)
-    await displayToggle(photographerId)
-  } catch (error) {
-    console.error('Error initializing the page:', error)
-  }
-}
-// Lancement de la fonction init lors du chargement du script.
-init()
 
+// calculate and return the total likes for the displayed media
+function getTotalLikesCount() {
+  const pictureLikesElements = document.querySelectorAll('.nblikes');
+  let totalLikesCount = 0;
+
+  pictureLikesElements.forEach((pictureLikes) => {
+    const likesCount = parseInt(pictureLikes.textContent);
+    totalLikesCount += likesCount;
+  });
+  return totalLikesCount;
+}
+
+// display the price and total like count at the bottom of the page
+async function displayPriceAndLikeData(photographerData) {
+  const priceBlock = document.getElementById('priceBlock');
+  priceBlock.textContent = `${photographerData.price}€ / jour`;
+}
+
+// display media gallery, update the total like count, and attach event listeners
+export async function displayMediaData() {
+  const mediaSection = document.getElementById('media-section');
+  mediaSection.innerHTML = '';
+  media.forEach((mediaItem) => {
+    const mediaModel = mediaFactory(mediaItem);
+    const userMediaDOM = mediaModel.getMediaCardDOM();
+    mediaSection.appendChild(userMediaDOM);
+  });
+  const nbLike = document.getElementById('nbLike');
+  const totalLikesCount = getTotalLikesCount();
+  nbLike.textContent = totalLikesCount;
+
+  document
+    .getElementById('media-section')
+    .addEventListener('click', getMediaCollectionSize);
+  document
+    .getElementById('media-section')
+    .addEventListener('click', getMediaClickedIndex);
+
+  document
+    .getElementById('media-section')
+    .addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        getMediaCollectionSize(event);
+        getMediaClickedIndex(event);
+      }
+    });
+}
+
+// return the count of all media items in the collection
+export function getMediaCollectionSize() {
+  const mediaCollection = document.querySelectorAll('.photographerMedia');
+  return mediaCollection.length;
+}
+
+// get the index of the media item that was clicked on
+export function getMediaClickedIndex(event) {
+  if (!event.target.classList.contains('photographerMedia')) return;
+
+  const mediaCollection = document.querySelectorAll('.photographerMedia');
+  const mediaClicked = event.target;
+  mediaClickedIndex = Array.from(mediaCollection).indexOf(mediaClicked);
+
+  // update the global state
+  globalState.mediaClickedIndex = mediaClickedIndex;
+
+  return mediaClickedIndex;
+}
+
+// initialize the photographer page with sorted media, display photographer details, and attach global event listeners
+async function init() {
+  const { photographer, media: retrievedMedia } = await getPhotographer();
+  media = retrievedMedia.sort((a, b) => b.likes - a.likes);
+  globalState.media = media;
+  displayPhotographData(photographer);
+  displayPriceAndLikeData(photographer);
+  displayMediaData(media);
+}
+
+init();

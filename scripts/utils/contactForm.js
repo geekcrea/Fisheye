@@ -1,122 +1,91 @@
-// Fonction pour afficher la modal de contact
-function displayModal () {
-  // Sélection de l'élément modal par son ID
-  const modal = document.getElementById('contact_modal')
-  // Affichage de la modal en modifiant le style
-  modal.style.display = 'block'
-  // Définition des attributs ARIA pour l'accessibilité
-  modal.setAttribute('aria-modal', 'true')
-  modal.setAttribute('role', 'dialog')
-  modal.setAttribute('aria-labelledby', 'contact_modal_label')
+// initial setup when the document is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // get DOM elements related to the contact form
+  const firstName = document.getElementById('firstName');
+  const lastName = document.getElementById('lastName');
+  const email = document.getElementById('email');
+  const message = document.getElementById('message');
+  const contactButton = document.getElementById('contactButton');
+  const form = document.getElementById('contactForm');
 
-  // Mise au point sur le premier élément interactif de la modal après un léger délai
-  setTimeout(() => {
-    // Sélection du premier input, textarea ou bouton dans la modal
-    const firstInput = modal.querySelector('input, textarea, button')
-    if (firstInput) {
-      firstInput.focus() // Mise au point sur cet élément
-    }
-  }, 100) // Délai de 100ms
-}
+  // attach click event listener to display the contact modal
+  contactButton.addEventListener('click', displayModal);
 
-// Fonction pour fermer la modal de contact
-function closeModal () {
-  // Sélection de l'élément modal par son ID
-  const modal = document.getElementById('contact_modal')
-  // Masquage de la modal en modifiant le style
-  modal.style.display = 'none'
+  // asynchronously display the contact modal and populate photographer's name
+  async function displayModal() {
+    const modal = document.getElementById('contact_modal');
+    modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+    firstName.focus();
 
-  // Sélection du bouton qui a ouvert la modal
-  const openModalButton = document.querySelector('.contact_button')
-  if (openModalButton) {
-    openModalButton.focus() // Mise au point sur ce bouton
-  }
-}
-
-// Fonction pour créer le template de contact
-function contactTemplate (data) {
-  // Extraction de la propriété name de l'objet data
-  const { name } = data
-
-  // Fonction pour valider le prénom avec une expression régulière
-  function validateFirstName (Name) {
-    const nameRegExp = /(^[a-z A-ZÂÀÈÉËÏÎéèëêïî-]{2,30})+$/
-    return nameRegExp.test(Name) // Renvoie true si le prénom est valide
+    // get photographer's name and update modal's title
+    const contactTitleWording = document.getElementById(
+      'contact-title-wording2'
+    );
+    const displayedPhotographerName =
+      document.getElementById('photographName').textContent;
+    contactTitleWording.innerText = displayedPhotographerName;
   }
 
-  // Fonction pour valider l'email avec une expression régulière
-  function validateEmail (email) {
-    const emailRegExp = /^[A-z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-zA-Z]{2,10}$/
-    return emailRegExp.test(email) // Renvoie true si l'email est valide
+  // close the contact modal and clear the form fields
+  function closeModal() {
+    const modal = document.getElementById('contact_modal');
+    modal.style.display = 'none';
+    lastName.value = '';
+    firstName.value = '';
+    email.value = '';
+    message.value = '';
+    modal.setAttribute('aria-hidden', 'true');
+    contactButton.focus();
   }
 
-  // Fonction pour valider la longueur du texte
-  function validateTextLength (text) {
-    return text.length >= 5 && text.length <= 100 // Renvoie true si le texte est de longueur valide
+  // attach click event listener to the close button of the modal
+  const closeCross = document.getElementById('closeCross');
+  closeCross.addEventListener('click', closeModal);
+
+  // handle form submission
+  function submitForm(event) {
+    event.preventDefault();
+    const formResult = {
+      firstname: firstName.value,
+      lastname: lastName.value,
+      email: email.value,
+      message: message.value,
+    };
+    console.log(formResult);
+    closeModal();
+
+    // accessibility : Provide feedback to the user about successful form submission
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.innerText = 'Merci! Votre message a été envoyé.';
+    feedbackDiv.style.position = 'fixed';
+    feedbackDiv.style.top = '50%';
+    feedbackDiv.style.left = '50%';
+    feedbackDiv.style.transform = 'translate(-50%, -50%)';
+    feedbackDiv.style.padding = '1rem';
+    feedbackDiv.style.backgroundColor = 'var(--primary-color)';
+    feedbackDiv.style.borderRadius = '5px';
+    feedbackDiv.style.color = '#fff';
+    feedbackDiv.setAttribute('role', 'alert');
+    feedbackDiv.setAttribute('aria-label', 'Message envoyé avec succès');
+    feedbackDiv.setAttribute('aria-live', 'assertive');
+    document.body.appendChild(feedbackDiv);
+
+    // remove the feedback message after 3 seconds
+    setTimeout(() => {
+      feedbackDiv.remove();
+    }, 3000);
   }
 
-  // Fonction pour obtenir l'élément DOM du contact
-  function getContactDOM () {
-    // Sélection de l'élément h2 pour le nom
-    const h2 = document.querySelector('h2.name')
-    // Modification du texte de h2 pour inclure le nom du photographe
-    h2.textContent = `Contactez-moi ${name}`
-    // Ajout des attributs pour l'accessibilité
-    h2.setAttribute('tabindex', '0')
-    h2.setAttribute('id', 'contact_modal_label')
+  // attach form submit event listener
+  form.addEventListener('submit', submitForm);
 
-    // Sélection des champs du formulaire par leur ID
-    const firstNameInput = document.getElementById('first')
-    const lastNameInput = document.getElementById('last')
-    const emailInput = document.getElementById('email')
-    const commentsInput = document.getElementById('comments')
-
-    // Sélection du bouton d'envoi du formulaire
-    const validateButton = document.querySelector('.contact_button-send')
-
-    // Ajout d'un écouteur d'événements pour la validation du formulaire lors du clic
-    validateButton.addEventListener('click', (event) => {
-      event.preventDefault() // Empêche l'envoi par défaut du formulaire
-
-      // Validation du prénom
-      const firstName = firstNameInput.value
-      const isFirstNameValid = validateFirstName(firstName)
-      if (isFirstNameValid) {
-        console.log('Prénom:', firstName)
-      } else {
-        console.log("Le prénom n'est pas valide.")
-      }
-
-      // Validation du nom
-      const lastName = lastNameInput.value
-      const isLastNameValid = validateFirstName(lastName)
-      if (isLastNameValid) {
-        console.log('Nom:', lastName)
-      } else {
-        console.log("Le nom n'est pas valide.")
-      }
-
-      // Validation de l'email
-      const email = emailInput.value
-      const isEmailValid = validateEmail(email)
-      if (isEmailValid) {
-        console.log('Email:', email)
-      } else {
-        console.log("L'email n'est pas valide.")
-      }
-
-      // Validation des commentaires
-      const comments = commentsInput.value
-      const isCommentsValid = validateTextLength(comments)
-      if (isCommentsValid) {
-        console.log('Commentaires:', comments)
-      } else {
-        console.log('Les commentaires ne sont pas valides.')
-      }
-    })
-
-    return h2 // Retourne l'élément h2 modifié
-  }
-
-  return { getContactDOM } // Retourne la fonction getContactDOM
-}
+  // accessibility : close the modal when the 'Escape' key is pressed
+  document.addEventListener('keydown', function (event) {
+    if (
+      event.key === 'Escape' &&
+      document.getElementById('contact_modal').style.display === 'block'
+    )
+      closeModal();
+  });
+});

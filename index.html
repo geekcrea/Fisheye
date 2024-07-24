@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
-  <title>Fisheye</title>
-  <link href="css/style.css" rel="stylesheet" type="text/css" />
-</head>
-
-<body>
-  <header>
-    <!-- Utilisation de la balise nav pour une meilleure sémantique de la navigation -->
-    <nav>
-      <h1 aria-label="home" tabindex="0"><img src="assets/images/logo.png" class="logo" alt="fisheye logo" /></h1>
-    </nav>
-    <h1 aria-label="Bienvenue sur notre page dédiée à nos photographes fisheye " tabindex="0">Nos photographes</h1>
-  </header>
-  <main id="main">
-    <section class="photographer_section">
-    </section>
-  </main>
-  <script src="https://kit.fontawesome.com/6ad2fc119a.js" crossorigin="anonymous"></script>
-  <script src="./scripts/pages/index.js" async></script>
-  <script src="./scripts/templates/photographerId.js" async></script>
-</body>
-
+  <head>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="./assets/favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <title>Fisheye</title>
+  </head>
+  <body>
+    <header>
+      <a href="./index.html">
+        <img
+        src="assets/images/logo.png"
+        class="logo"
+        alt="Logo du site Fisheye"
+        role="link"
+        aria-label="Fisheye homepage"
+        />
+      </a>
+      <h1>Nos photographes</h1>
+    </header>
+    <main id="main">
+      <div class="photographer_section"></div>
+    </main>
+    <script type="module" src="scripts/factories/photographerFactory.js"></script>
+    <script type="module" src="scripts/pages/index.js"></script>
+  </body>
 </html>
