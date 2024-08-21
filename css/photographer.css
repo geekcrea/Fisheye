@@ -40,6 +40,7 @@
   font-weight: 400;
   height: 35px;
   width: 95%;
+ 
 }
 
 .photograph-header h2 {
@@ -93,18 +94,18 @@
   padding: 2px 3px 1px 3px;
   outline: none;
   height: 24px;
-  transition: .15s ease-out;
+  transition: 0.15s ease-out;
 }
 #media-section figure .div-title-likes .likeHeart:hover {
   transform: scale(1.18);
-  transition: .15s ease-in;
+  transition: 0.15s ease-in;
 }
 
-#media-section figure .div-title-likes .likeHeart:focus-visible{
+#media-section figure .div-title-likes .likeHeart:focus-visible {
   outline: none;
   overflow: hidden;
   transform: scale(1.18);
-  transition: .15s ease-in;
+  transition: 0.15s ease-in;
 }
 
 #media-section figure h2,
@@ -124,7 +125,7 @@
   border-radius: 2%;
   box-sizing: border-box;
   border: 2px solid transparent;
-  transition: .15s ease-out;
+  transition: 0.15s ease-out;
   overflow-clip-margin: unset;
 }
 
@@ -133,7 +134,7 @@
 #media-section figure img:focus-visible,
 #media-section figure video:focus-visible {
   border: 2px solid var(--secondary-color);
-  transition: .15s ease-in
+  transition: 0.15s ease-in;
 }
 
 .custom-select {
@@ -166,17 +167,17 @@
 }
 
 .custom-select .selected-option:after {
-  font-family: "Font Awesome 6 Free"; 
+  font-family: "Font Awesome 6 Free";
   content: "\f078";
   margin-left: 10px;
-  font-weight: 900; 
+  font-weight: 900;
   display: inline-block;
   transition: transform 0.3s;
 }
 
 .custom-select .selected-option:focus,
 .custom-select .selected-option:focus-visible {
-  outline:2px solid var(--secondary-color);
+  outline: 2px solid var(--secondary-color);
 }
 
 .custom-select .options {
@@ -192,7 +193,7 @@
 }
 
 .custom-select .options.open {
-  box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.62);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.62);
 }
 
 .custom-select .selected-option.open:after {
@@ -208,12 +209,12 @@
 
 .custom-select .option:hover,
 .custom-select .option:focus-visible {
-  background-color: #DB8876;
+  background-color: #db8876;
   color: black;
   z-index: 50;
 }
 
-.custom-select .option:before{
+.custom-select .option:before {
   content: "";
   position: absolute;
   width: 85%;
@@ -265,7 +266,7 @@
   background-color: var(--primary-color);
   border-radius: 5px;
   cursor: pointer;
-  transition: .15s ease-out;
+  transition: 0.15s ease-out;
   position: relative;
   left: calc(50% - 85px);
   bottom: 255px;
@@ -274,8 +275,8 @@
 .contact_button:hover,
 .contact_button:focus-visible {
   color: #000000;
-  background-color: #DB8876;
-  transition: .15s ease-in;
+  background-color: #db8876;
+  transition: 0.15s ease-in;
   outline: none;
 }
 
@@ -315,11 +316,12 @@
   opacity: 1;
   box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
   max-height: 100%;
-  overflow-y: auto;
   z-index: 1;
+  overflow-y: scroll;
 }
-A
-.modal header {
+
+
+ .modal header {
   width: 100%;
   position: relative;
   display: block;
@@ -329,25 +331,23 @@ A
 .modal header img {
   cursor: pointer;
   position: relative;
-  left: 94%;
-  bottom: 170px;
+  left: 98%;
+  bottom: 135px;
+  height: 30px;
 }
 
 .modal header h2 {
-  font-size: 52px;
-  font-weight: normal;
+  font-size: 30px;
+  font-weight: bold;
   position: relative;
   margin-bottom: 10px;
 }
 
-.modal header #contact-title-wording1 {
-  bottom: 30px;
-  width: 90%;
-}
 
-.modal header #contact-title-wording2 {
-  bottom: 50px;
-  width: 90%;
+
+.title-modal{
+  flex-direction: column;
+ 
 }
 
 form {
@@ -390,7 +390,7 @@ form textarea {
 }
 
 #submit_button {
-  margin-bottom: 30px;
+  margin-bottom: 80px;
   border: 1px solid transparent;
   top: 0px;
   left: 0px;
@@ -431,14 +431,14 @@ form textarea {
   cursor: pointer;
   position: relative;
   color: var(--primary-color);
-  transition: .15s ease-in;
+  transition: 0.15s ease-in;
 }
 
 .lightBoxPrev:focus-visible,
 .lightBoxNext:focus-visible {
   outline: 2px solid var(--secondary-color);
   border-radius: 10%;
-  transition: .15s ease-out;
+  transition: 0.15s ease-out;
 }
 
 .lightBoxNext {
@@ -480,5 +480,122 @@ form textarea {
   outline: 2px solid transparent;
   border-radius: 5px;
   padding: 1px 5px;
-  transition: .15s ease-in;
+  transition: 0.15s ease-in;
+  color: #901c1c;
+}
+
+@media (min-width: 600px) and (max-width: 1024px) {
+  .photograph-header h1 {
+    color: #d3573c;
+    font-size: clamp(32px, 4vw, 64px);
+    font-weight: 400;
+    height: 35px;
+    width: 95%;
+    padding-bottom: 30px;
+    margin-left: 0;
+  }
+
+  .photograph-header img {
+    height: 170px;
+    width: 170px;
+    object-fit: cover;
+    border-radius: 50%;
+    left: calc(100% - 210px);
+    top: 50px;
+    position: relative;
+    overflow-clip-margin: unset;
+  }
+
+  .contact_button {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    padding: 11px;
+    width: 170px;
+    height: 70px;
+    border: none;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.15s ease-out;
+    position: relative;
+    left: 0;
+    bottom: 160px;
+    margin-left: 30px;
+  }
+
+  #media-section {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 380px;
+    column-gap: 70px;
+    row-gap: 10px;
+    padding-bottom: 60px;
+    justify-items: center;
+    align-items: center;
+  }
+
+
+}
+
+@media (min-width: 350px) and (max-width: 599px) {
+
+  .contact_button {
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    padding: 11px;
+    width: 170px;
+    height: 70px;
+    border: none;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.15s ease-out;
+    position: relative;
+    left: 0;
+    bottom: 150px;
+    margin-left: 30px;
+  }
+
+  .modal header img {
+  
+    bottom: 95px;
+    height: 30px;
+  }
+
+  .modal header h2 {
+    font-size: 25px;
+  
+  }
+  .photograph-header h1 {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+
+  #media-section {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 380px;
+    column-gap: 70px;
+    row-gap: 10px;
+    padding-bottom: 60px;
+    justify-items: center;
+    align-items: center;
+  }
+
+  .photograph-header h2 {
+    color: var(--primary-color);
+    font-size: clamp(12px, 2vw, 24px);
+    font-weight: 400;
+    height: 24px;
+    padding-top: 25px;
+  }
+
 }
