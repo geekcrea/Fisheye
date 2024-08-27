@@ -389,6 +389,8 @@ form textarea {
   font-family: inherit;
 }
 
+
+
 #submit_button {
   margin-bottom: 80px;
   border: 1px solid transparent;
@@ -398,7 +400,7 @@ form textarea {
 
 #submit_button:hover,
 #submit_button:focus-visible {
-  border: 1px solid #000000;
+  border: 1px solid #050505;
 }
 
 .lightBoxModalClose {

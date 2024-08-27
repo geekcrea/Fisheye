@@ -1,5 +1,5 @@
 import { getMediaCollectionSize } from '../pages/photographer.js';
-import { globalState } from '../utils/globalState.js';
+import { globalState } from './globalState.js';
 
 // Variable to keep a reference to the lightbox's close button
 let lightBoxModalCloseButton = null;

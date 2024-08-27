@@ -123,4 +123,4 @@ async function init() {
   displayMediaData(media);
 }
 
-init();
+document.addEventListener('DOMContentLoaded', init);

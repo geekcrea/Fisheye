@@ -1,0 +1,15 @@
+{
+  "name": "fisheye",
+  "version": "1.0.0",
+  "description": "Projet Fisheye",
+  "scripts": {
+    "dev": "http-server",
+    "lint": "eslint ./**/*.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "eslint": "^9.9.0",
+    "globals": "^15.9.0",
+    "@eslint-community/eslint-utils": "^4.4.0"
+  }
+}

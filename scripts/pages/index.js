@@ -31,4 +31,4 @@ async function init() {
   displayData(photographers);
 }
 
-init();
+document.addEventListener('DOMContentLoaded', init);

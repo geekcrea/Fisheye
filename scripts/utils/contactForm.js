@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // asynchronously display the contact modal and populate photographer's name
   async function displayModal() {
     const modal = document.getElementById('contact_modal');
+
+      // Réinitialise le formulaire à chaque ouverture du modal
+  form.reset();
+
     modal.style.display = 'block';
     modal.setAttribute('aria-hidden', 'false');
     firstName.focus();
@@ -36,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     email.value = '';
     message.value = '';
     modal.setAttribute('aria-hidden', 'true');
-    contactButton.focus();
+    contactButton.focus();    
   }
 
   // attach click event listener to the close button of the modal
@@ -45,15 +49,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // handle form submission
   function submitForm(event) {
-    event.preventDefault();
-    const formResult = {
-      firstname: firstName.value,
-      lastname: lastName.value,
-      email: email.value,
-      message: message.value,
-    };
-    console.log(formResult);
-    closeModal();
+      event.preventDefault();
+
+   
+  // Expression régulière pour valider l'email
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Sélection du champ d'erreur pour l'email
+  const emailError = document.getElementById('emailError');
+
+  // Réinitialisation du message d'erreur
+  emailError.style.display = 'none';
+  emailError.textContent = '';
+
+  
+  // Validation de l'email
+  if (!emailPattern.test(email.value)) {
+    emailError.textContent = 'Veuillez entrer une adresse email valide.';
+    emailError.style.display = 'block'; // Affiche le message d'erreur
+    return;
+  }
+
+  const formResult = {
+    firstname: firstName.value,
+    lastname: lastName.value,
+    email: email.value,
+    message: message.value,
+  };
+  console.log(formResult);
+
+  
+  // Fermer le modal
+  closeModal();
 
     // accessibility : Provide feedback to the user about successful form submission
     const feedbackDiv = document.createElement('div');
@@ -71,11 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
     feedbackDiv.setAttribute('aria-live', 'assertive');
     document.body.appendChild(feedbackDiv);
 
-    // remove the feedback message after 3 seconds
+    // remove the feedback message after  4second
     setTimeout(() => {
       feedbackDiv.remove();
-    }, 3000);
+    }, 4000);
   }
+
 
   // attach form submit event listener
   form.addEventListener('submit', submitForm);
@@ -88,4 +116,5 @@ document.addEventListener('DOMContentLoaded', () => {
     )
       closeModal();
   });
-});
+
+})

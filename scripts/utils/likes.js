@@ -11,6 +11,10 @@ export function likeMedia(event) {
   let currentCount = parseInt(likeCountElement.textContent, 10);
   // extract the current global like count
   const currentColor = getComputedStyle(targetElement).color;
+ //testing
+  console.log('Initial media like count:', currentCount);
+  console.log('Initial global like count:', globalLikeCountElement.textContent);
+  console.log('Initial heart color:', currentColor);
 
   // determine the current color of the like heart icon
   let globalCount = parseInt(globalLikeCountElement.textContent, 10);
